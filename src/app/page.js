@@ -1,6 +1,6 @@
-import RestaurantListings from "@/src/components/RestaurantListings.jsx";
-import { getRestaurants } from "@/src/lib/firebase/firestore.js";
-//import { getRestaurantSnapshotById } from "@/src/lib/firebase/firestore.js";
+import TrailListings from "@/src/components/TrailListings.jsx";
+import { getTrails } from "@/src/lib/firebase/firestore.js";
+//import { getTrailSnapshotById } from "@/src/lib/firebase/firestore.js";
 
 
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp.js";
@@ -18,16 +18,16 @@ export default async function Home(props) {
   // Resolve URL filters and use the authenticated Firebase app to fetch the listing.
   const searchParams = await props.searchParams;
   // Using seachParams which Next.js provides, allows the filtering to happen on the server-side, for example:
-  // ?city=London&category=Indian&sort=Review
+  // ?city=Yosemite&category=Alpine&sort=Review
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
-  const restaurants = await getRestaurants(
+  const trails = await getTrails(
     getFirestore(firebaseServerApp),
     searchParams
   );
   return (
     <main className="main__home">
-      <RestaurantListings
-        initialRestaurants={restaurants}
+      <TrailListings
+        initialTrails={trails}
         searchParams={searchParams}
       />
     </main>

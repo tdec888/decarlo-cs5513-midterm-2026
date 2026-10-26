@@ -1,6 +1,7 @@
-// The filters shown on the restaurant listings page
+// The filters shown on the trail listings page
 
 import Tag from "@/src/components/Tag.jsx";
+import { DIFFICULTY_LABELS } from "@/src/lib/utils.js";
 
 function FilterSelect({ label, options, value, onChange, name, icon }) {
   return (
@@ -38,7 +39,7 @@ export default function Filters({ filters, setFilters }) {
         <summary>
           <img src="/filter.svg" alt="filter" />
           <div>
-            <p>Restaurants</p>
+            <p>Trails</p>
             <p>Sorted by {filters.sort || "Rating"}</p>
           </div>
         </summary>
@@ -51,22 +52,18 @@ export default function Filters({ filters, setFilters }) {
           }}
         >
           <FilterSelect
-            label="Category"
+            label="Type"
             options={[
               "",
-              "Italian",
-              "Chinese",
-              "Japanese",
-              "Mexican",
-              "Indian",
-              "Mediterranean",
-              "Caribbean",
-              "Cajun",
-              "German",
-              "Russian",
-              "Cuban",
-              "Organic",
-              "Tapas",
+              "Loop",
+              "Out-and-back",
+              "Ridge",
+              "Waterfall",
+              "Alpine",
+              "Forest",
+              "Coastal",
+              "Desert",
+              "Canyon",
             ]}
             value={filters.category}
             onChange={(event) => handleSelectionChange(event, "category")}
@@ -75,20 +72,20 @@ export default function Filters({ filters, setFilters }) {
           />
 
           <FilterSelect
-            label="City"
+            label="Region"
             options={[
               "",
-              "New York",
-              "Los Angeles",
-              "London",
-              "Paris",
-              "Tokyo",
-              "Mumbai",
-              "Dubai",
-              "Amsterdam",
-              "Seoul",
-              "Singapore",
-              "Istanbul",
+              "Yosemite",
+              "Zion",
+              "Banff",
+              "Acadia",
+              "Rocky Mountain",
+              "Smokies",
+              "Olympics",
+              "Redwoods",
+              "Sedona",
+              "Lake District",
+              "Swiss Alps",
             ]}
             value={filters.city}
             onChange={(event) => handleSelectionChange(event, "city")}
@@ -97,11 +94,11 @@ export default function Filters({ filters, setFilters }) {
           />
 
           <FilterSelect
-            label="Price"
-            options={["", "$", "$$", "$$$", "$$$$"]}
-            value={filters.price}
-            onChange={(event) => handleSelectionChange(event, "price")}
-            name="price"
+            label="Difficulty"
+            options={["", ...DIFFICULTY_LABELS]}
+            value={filters.difficulty}
+            onChange={(event) => handleSelectionChange(event, "difficulty")}
+            name="difficulty"
             icon="/price.svg"
           />
 
@@ -123,7 +120,7 @@ export default function Filters({ filters, setFilters }) {
                   setFilters({
                     city: "",
                     category: "",
-                    price: "",
+                    difficulty: "",
                     sort: "",
                   });
                 }}

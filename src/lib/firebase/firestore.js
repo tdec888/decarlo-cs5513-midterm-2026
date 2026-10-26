@@ -1,4 +1,5 @@
-import { generateFakeRestaurantsAndReviews } from "@/src/lib/fakeRestaurants.js";
+import { generateFakeTrailsAndReviews } from "@/src/lib/fakeTrails.js";
+import { difficultyValue } from "@/src/lib/utils.js";
 
 import {
   collection,
@@ -13,19 +14,18 @@ import {
   runTransaction,
   where,
   addDoc,
-  getFirestore,
 } from "firebase/firestore";
 
 import { db } from "@/src/lib/firebase/clientApp";
 
-// Store the uploaded image URL on its restaurant document.
-export async function updateRestaurantImageReference(
-  restaurantId,
+// Store the uploaded image URL on its trail document.
+export async function updateTrailImageReference(
+  trailId,
   publicImageUrl
 ) {
-  const restaurantRef = doc(collection(db, "restaurants"), restaurantId);
-  if (restaurantRef) {
-    await updateDoc(restaurantRef, { photo: publicImageUrl });
+  const trailRef = doc(collection(db, "trails"), trailId);
+  if (trailRef) {
+    await updateDoc(trailRef, { photo: publicImageUrl });
   }
 }
 
@@ -36,8 +36,8 @@ const updateWithRating = async (
   review
 ) => {
   // Read and update the aggregate fields within the same transaction as the review write.
-  const restaurant = await transaction.get(docRef);
-  const data = restaurant.data();
+  const trail = await transaction.get(docRef);
+  const data = trail.data();
   const newNumRatings = data?.numRatings ? data.numRatings + 1 : 1;
   const newSumRating = (data?.sumRating || 0) + Number(review.rating);
   const newAverage = newSumRating / newNumRatings;
@@ -54,10 +54,10 @@ const updateWithRating = async (
   });
 };
 
-export async function addReviewToRestaurant(db, restaurantId, review) {
+export async function addReviewToTrail(db, trailId, review) {
   // Validate required inputs before constructing Firestore document references.
-  if (!restaurantId) {
-    throw new Error("No restaurant ID has been provided.");
+  if (!trailId) {
+    throw new Error("No trail ID has been provided.");
   }
 
   if (!review) {
@@ -65,18 +65,18 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
   }
 
   try {
-    const docRef = doc(collection(db, "restaurants"), restaurantId);
+    const docRef = doc(collection(db, "trails"), trailId);
     const newRatingDocument = doc(
-      collection(db, `restaurants/${restaurantId}/ratings`),
+      collection(db, `trails/${trailId}/ratings`),
     );
 
-    // Commit the review and updated restaurant rating totals atomically.
+    // Commit the review and updated trail rating totals atomically.
     await runTransaction(db, (transaction) =>
       updateWithRating(transaction, docRef, newRatingDocument, review),
     );
   } catch (error) {
     console.error(
-      "There was an error adding the rating to the restaurant",
+      "There was an error adding the rating to the trail",
       error,
     );
     throw error;
@@ -84,7 +84,7 @@ export async function addReviewToRestaurant(db, restaurantId, review) {
 }
 
 
-function applyQueryFilters(q, { category, city, price, sort }) {
+function applyQueryFilters(q, { category, city, difficulty, sort }) {
   // Add only the filters supplied in the URL or by the caller.
   if (category) {
     q = query(q, where("category", "==", category));
@@ -92,8 +92,8 @@ function applyQueryFilters(q, { category, city, price, sort }) {
   if (city) {
     q = query(q, where("city", "==", city));
   }
-  if (price) {
-    q = query(q, where("price", "==", price.length));
+  if (difficulty) {
+    q = query(q, where("difficulty", "==", difficultyValue(difficulty)));
   }
   if (sort === "Rating" || !sort) {
     q = query(q, orderBy("avgRating", "desc"));
@@ -103,9 +103,9 @@ function applyQueryFilters(q, { category, city, price, sort }) {
   return q;
 }
 
-// Fetch restaurants for the requested filters and convert timestamps to serializable dates.
-export async function getRestaurants(db = db, filters = {}) {
-  let q = query(collection(db, "restaurants"));
+// Fetch trails for the requested filters and convert timestamps to serializable dates.
+export async function getTrails(db = db, filters = {}) {
+  let q = query(collection(db, "trails"));
 
   // Convert Firestore timestamps to Dates before returning data to the caller.
   q = applyQueryFilters(q, filters);
@@ -120,17 +120,17 @@ export async function getRestaurants(db = db, filters = {}) {
   });
 }
 
-// Subscribe to filtered restaurant changes and pass plain result objects to the callback.
-export function getRestaurantsSnapshot(cb, filters = {}) {
+// Subscribe to filtered trail changes and pass plain result objects to the callback.
+export function getTrailsSnapshot(cb, filters = {}) {
   if (typeof cb !== "function") {
     console.log("Error: The callback parameter is not a function");
     return;
   }
 
-  let q = query(collection(db, "restaurants"));
+  let q = query(collection(db, "trails"));
   q = applyQueryFilters(q, filters);
 
-  // Re-run the mapping for each snapshot so consumers receive plain restaurant objects.
+  // Re-run the mapping for each snapshot so consumers receive plain trail objects.
   return onSnapshot(q, (querySnapshot) => {
     const results = querySnapshot.docs.map((doc) => {
       return {
@@ -145,14 +145,14 @@ export function getRestaurantsSnapshot(cb, filters = {}) {
   });
 }
 
-// Fetch one restaurant document for a server-rendered restaurant page.
-export async function getRestaurantById(db, restaurantId) {
-  if (!restaurantId) {
-    console.log("Error: Invalid ID received: ", restaurantId);
+// Fetch one trail document for a server-rendered trail page.
+export async function getTrailById(db, trailId) {
+  if (!trailId) {
+    console.log("Error: Invalid ID received: ", trailId);
     return;
   }
-  // Fetch one restaurant and convert its timestamp to a serializable Date.
-  const docRef = doc(db, "restaurants", restaurantId);
+  // Fetch one trail and convert its timestamp to a serializable Date.
+  const docRef = doc(db, "trails", trailId);
   const docSnap = await getDoc(docRef);
   return {
     ...docSnap.data(),
@@ -161,10 +161,10 @@ export async function getRestaurantById(db, restaurantId) {
 }
 
 
-// Subscribe to changes for a single restaurant document.
-export function getRestaurantSnapshotById(restaurantId, cb) {
-  if (!restaurantId) {
-    console.log("Error: Invalid ID received: ", restaurantId);
+// Subscribe to changes for a single trail document.
+export function getTrailSnapshotById(trailId, cb) {
+  if (!trailId) {
+    console.log("Error: Invalid ID received: ", trailId);
     return;
   }
 
@@ -173,8 +173,8 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
     return;
   }
 
-  // Keep the displayed restaurant synchronized with its Firestore document.
-  const docRef = doc(db, "restaurants", restaurantId);
+  // Keep the displayed trail synchronized with its Firestore document.
+  const docRef = doc(db, "trails", trailId);
   return onSnapshot(docRef, (docSnap) => {
     cb({
       ...docSnap.data(),
@@ -183,16 +183,16 @@ export function getRestaurantSnapshotById(restaurantId, cb) {
   });
 }
 
-// Fetch a restaurant's reviews in newest-first order.
-export async function getReviewsByRestaurantId(db, restaurantId) {
-  if (!restaurantId) {
-    console.log("Error: Invalid restaurantId received: ", restaurantId);
+// Fetch a trail's reviews in newest-first order.
+export async function getReviewsByTrailId(db, trailId) {
+  if (!trailId) {
+    console.log("Error: Invalid trailId received: ", trailId);
     return;
   }
 
-  // Return reviews newest first for the restaurant detail view.
+  // Return reviews newest first for the trail detail view.
   const q = query(
-    collection(db, "restaurants", restaurantId, "ratings"),
+    collection(db, "trails", trailId, "ratings"),
     orderBy("timestamp", "desc")
   );
 
@@ -207,16 +207,16 @@ export async function getReviewsByRestaurantId(db, restaurantId) {
   });
 }
 
-// Subscribe to a restaurant's reviews and deliver them in newest-first order.
-export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
-  if (!restaurantId) {
-    console.log("Error: Invalid restaurantId received: ", restaurantId);
+// Subscribe to a trail's reviews and deliver them in newest-first order.
+export function getReviewsSnapshotByTrailId(trailId, cb) {
+  if (!trailId) {
+    console.log("Error: Invalid trailId received: ", trailId);
     return;
   }
 
-  // Subscribe to the restaurant's reviews and preserve newest-first ordering.
+  // Subscribe to the trail's reviews and preserve newest-first ordering.
   const q = query(
-    collection(db, "restaurants", restaurantId, "ratings"),
+    collection(db, "trails", trailId, "ratings"),
     orderBy("timestamp", "desc")
   );
   return onSnapshot(q, (querySnapshot) => {
@@ -232,20 +232,20 @@ export function getReviewsSnapshotByRestaurantId(restaurantId, cb) {
   });
 }
 
-// Generate sample data, then save each restaurant and its reviews to Firestore.
-export async function addFakeRestaurantsAndReviews() {
-  const data = await generateFakeRestaurantsAndReviews();
-  // Create each restaurant first so its generated ratings can use the new document ID.
-  for (const { restaurantData, ratingsData } of data) {
+// Generate sample data, then save each trail and its reviews to Firestore.
+export async function addFakeTrailsAndReviews() {
+  const data = await generateFakeTrailsAndReviews();
+  // Create each trail first so its generated ratings can use the new document ID.
+  for (const { trailData, ratingsData } of data) {
     try {
       const docRef = await addDoc(
-        collection(db, "restaurants"),
-        restaurantData
+        collection(db, "trails"),
+        trailData
       );
 
       for (const ratingData of ratingsData) {
         await addDoc(
-          collection(db, "restaurants", docRef.id, "ratings"),
+          collection(db, "trails", docRef.id, "ratings"),
           ratingData
         );
       }

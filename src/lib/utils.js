@@ -17,3 +17,14 @@ export function getRandomDateAfter(startingDate = new Date()) {
   );
   return randomDate;
 }
+
+export const DIFFICULTY_LABELS = ["Easy", "Moderate", "Hard", "Expert"];
+
+export function difficultyLabel(level) {
+  return DIFFICULTY_LABELS[level - 1] || "";
+}
+
+export function difficultyValue(label) {
+  const index = DIFFICULTY_LABELS.indexOf(label);
+  return index === -1 ? null : index + 1;
+}

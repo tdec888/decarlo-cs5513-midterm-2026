@@ -17,14 +17,14 @@ import { vertexAI, gemini20Flash } from '@genkit-ai/vertexai';
 //end updated import
 //commenting out to adjust import order: import { genkit } from "genkit";
 
-import { getReviewsByRestaurantId } from "@/src/lib/firebase/firestore.js";
+import { getReviewsByTrailId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 import { getFirestore } from "firebase/firestore"; 
 
 // Placeholder for a future AI-generated summary; no model call is made yet.
-/* export async function GeminiSummary({ restaurantId }) {
+/* export async function GeminiSummary({ trailId }) {
   return (
-    <div className="restaurant__review_summary">
+    <div className="trail__review_summary">
       <p>TODO: summarize reviews</p>
     </div>
   );
@@ -33,18 +33,18 @@ import { getFirestore } from "firebase/firestore";
 
 //THIS FUNCTION IS REPLACING THE ORIGINAL GEMINI 2.0 WITH VERTEXT AND GEMINI 2.5 FLASH---
 // an API key is not needed BUT, charges will apply.
-export async function GeminiSummary({ restaurantId }) {
+export async function GeminiSummary({ trailId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
-  const reviews = await getReviewsByRestaurantId(
+  const reviews = await getReviewsByTrailId(
     getFirestore(firebaseServerApp),
-    restaurantId
+    trailId
   );
 
   const reviewSeparator = "@";
   const prompt = `
-    Based on the following restaurant reviews, 
+    Based on the following hiking trail reviews, 
     where each review is separated by a '${reviewSeparator}' character, 
-    create a one-sentence summary of what people think of the restaurant. 
+    create a one-sentence summary of what people think of the trail. 
 
     Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
   `;
@@ -61,7 +61,7 @@ export async function GeminiSummary({ restaurantId }) {
     
     const { text } = await ai.generate(prompt);
     return (
-      <div className="restaurant__review_summary">
+      <div className="trail__review_summary">
         <p>{text}</p>
         <p>✨ Summarized with Gemini via Vertex AI</p>
       </div>
@@ -77,18 +77,18 @@ export async function GeminiSummary({ restaurantId }) {
 
 
 /* We are commenting out the gemini20 flash which uses the API KEY-----THIS IS THE ORIGINAL AI FUNCTION BELOW
-export async function GeminiSummary({ restaurantId }) {
+export async function GeminiSummary({ trailId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
-  const reviews = await getReviewsByRestaurantId(
+  const reviews = await getReviewsByTrailId(
     getFirestore(firebaseServerApp),
-    restaurantId
+    trailId
   );
 
   const reviewSeparator = "@";
   const prompt = `
-    Based on the following restaurant reviews, 
+    Based on the following hiking trail reviews, 
     where each review is separated by a '${reviewSeparator}' character, 
-    create a one-sentence summary of what people think of the restaurant. 
+    create a one-sentence summary of what people think of the trail. 
 
     Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
   `;
@@ -110,7 +110,7 @@ export async function GeminiSummary({ restaurantId }) {
     const { text } = await ai.generate(prompt);
 
     return (
-      <div className="restaurant__review_summary">
+      <div className="trail__review_summary">
         <p>{text}</p>
         <p>✨ Summarized with Gemini</p>
       </div>
@@ -124,7 +124,7 @@ export async function GeminiSummary({ restaurantId }) {
 // Shown while the summary section is waiting to render.
 export function GeminiSummarySkeleton() {
   return (
-    <div className="restaurant__review_summary">
+    <div className="trail__review_summary">
       <p>✨ Summarizing reviews with Gemini...</p>
     </div>
   );

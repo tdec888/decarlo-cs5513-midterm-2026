@@ -1,25 +1,25 @@
 "use client";
 
-// This components shows one individual restaurant
-// It receives data from src/app/restaurant/[id]/page.jsx
+// This components shows one individual trail
+// It receives data from src/app/trail/[id]/page.jsx
 
 import { React, useState, useEffect, Suspense } from "react";
 import dynamic from "next/dynamic";
-import { getRestaurantSnapshotById } from "@/src/lib/firebase/firestore.js";
+import { getTrailSnapshotById } from "@/src/lib/firebase/firestore.js";
 import { useUser } from "@/src/lib/getUser";
-import RestaurantDetails from "@/src/components/RestaurantDetails.jsx";
-import { updateRestaurantImage } from "@/src/lib/firebase/storage.js";
+import TrailDetails from "@/src/components/TrailDetails.jsx";
+import { updateTrailImage } from "@/src/lib/firebase/storage.js";
 
 const ReviewDialog = dynamic(() => import("@/src/components/ReviewDialog.jsx"));
 
-// Client-side restaurant view: keeps live restaurant data and review form state in sync.
-export default function Restaurant({
+// Client-side trail view: keeps live trail data and review form state in sync.
+export default function Trail({
   id,
-  initialRestaurant,
+  initialTrail,
   initialUserId,
   children,
 }) {
-  const [restaurantDetails, setRestaurantDetails] = useState(initialRestaurant);
+  const [trailDetails, setTrailDetails] = useState(initialTrail);
   const [isOpen, setIsOpen] = useState(false);
 
   // Prefer the live client auth state, with the server-rendered user ID as an initial fallback.
@@ -35,14 +35,14 @@ export default function Restaurant({
   };
 
   // Upload a selected image and immediately reflect its returned URL in the displayed details.
-  async function handleRestaurantImage(target) {
+  async function handleTrailImage(target) {
     const image = target.files ? target.files[0] : null;
     if (!image) {
       return;
     }
 
-    const imageURL = await updateRestaurantImage(id, image);
-    setRestaurantDetails({ ...restaurantDetails, photo: imageURL });
+    const imageURL = await updateTrailImage(id, image);
+    setTrailDetails({ ...trailDetails, photo: imageURL });
   }
 
   const handleClose = () => {
@@ -51,24 +51,24 @@ export default function Restaurant({
     setReview({ rating: 0, text: "" });
   };
 
-  // Subscribe to Firestore updates for this restaurant; return the unsubscribe callback on cleanup.
+  // Subscribe to Firestore updates for this trail; return the unsubscribe callback on cleanup.
   useEffect(() => {
-    return getRestaurantSnapshotById(id, (data) => {
-      setRestaurantDetails(data);
+    return getTrailSnapshotById(id, (data) => {
+      setTrailDetails(data);
     });
   }, [id]);
 
   return (
     <>
-      <RestaurantDetails
-        restaurant={restaurantDetails}
+      <TrailDetails
+        trail={trailDetails}
         userId={userId}
-        handleRestaurantImage={handleRestaurantImage}
+        handleTrailImage={handleTrailImage}
         setIsOpen={setIsOpen}
         isOpen={isOpen}
       >
         {children}
-      </RestaurantDetails>
+      </TrailDetails>
       {userId && (
         <Suspense fallback={<p>Loading...</p>}>
           <ReviewDialog

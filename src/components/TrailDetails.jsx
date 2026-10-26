@@ -1,19 +1,20 @@
-// This component shows restaurant metadata, and offers some actions to the user like uploading a new restaurant image, and adding a review.
+// This component shows trail metadata, and offers some actions to the user like uploading a new trail image, and adding a review.
 
 import React from "react";
 import renderStars from "@/src/components/Stars.jsx";
+import { difficultyLabel } from "@/src/lib/utils.js";
 
-const RestaurantDetails = ({
-  restaurant,
+const TrailDetails = ({
+  trail,
   userId,
-  handleRestaurantImage,
+  handleTrailImage,
   setIsOpen,
   isOpen,
   children,
 }) => {
   return (
     <section className="img__section">
-      <img src={restaurant.photo} alt={restaurant.name} />
+      <img src={trail.photo} alt={trail.name} />
 
       <div className="actions">
         {userId && (
@@ -27,7 +28,7 @@ const RestaurantDetails = ({
           />
         )}
         <label
-          onChange={(event) => handleRestaurantImage(event.target)}
+          onChange={(event) => handleTrailImage(event.target)}
           htmlFor="upload-image"
           className="add"
         >
@@ -44,18 +45,18 @@ const RestaurantDetails = ({
 
       <div className="details__container">
         <div className="details">
-          <h2>{restaurant.name}</h2>
+          <h2>{trail.name}</h2>
 
-          <div className="restaurant__rating">
-            <ul>{renderStars(restaurant.avgRating)}</ul>
+          <div className="trail__rating">
+            <ul>{renderStars(trail.avgRating)}</ul>
 
-            <span>({restaurant.numRatings})</span>
+            <span>({trail.numRatings})</span>
           </div>
 
           <p>
-            {restaurant.category} | {restaurant.city}
+            {trail.category} | {trail.city}
           </p>
-          <p>{"$".repeat(restaurant.price)}</p>
+          <p>{difficultyLabel(trail.difficulty)}</p>
           {children}
         </div>
       </div>
@@ -63,4 +64,4 @@ const RestaurantDetails = ({
   );
 };
 
-export default RestaurantDetails;
+export default TrailDetails;

@@ -2,7 +2,7 @@
 
 import React from "react";
 import renderStars from "@/src/components/Stars.jsx";
-import { difficultyLabel } from "@/src/lib/utils.js";
+import { difficultyLabel, formatCoordinates } from "@/src/lib/utils.js";
 
 const TrailDetails = ({
   trail,
@@ -12,6 +12,8 @@ const TrailDetails = ({
   isOpen,
   children,
 }) => {
+  const coordinates = formatCoordinates(trail.latitude, trail.longitude);
+
   return (
     <section className="img__section">
       <img src={trail.photo} alt={trail.name} />
@@ -57,6 +59,9 @@ const TrailDetails = ({
             {trail.category} | {trail.city}
           </p>
           <p>{difficultyLabel(trail.difficulty)}</p>
+          {coordinates && (
+            <p className="trail__coordinates">Coordinates: {coordinates}</p>
+          )}
           {children}
         </div>
       </div>

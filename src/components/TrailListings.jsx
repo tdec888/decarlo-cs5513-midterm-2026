@@ -9,7 +9,13 @@ import { useRouter } from "next/navigation";
 import renderStars from "@/src/components/Stars.jsx";
 import { getTrailsSnapshot } from "@/src/lib/firebase/firestore.js";
 import Filters from "@/src/components/Filters.jsx";
-import { difficultyLabel } from "@/src/lib/utils.js";
+import { difficultyLabel, formatCoordinates } from "@/src/lib/utils.js";
+
+import TrailMapLoader from "@/src/components/TrailMapLoader.jsx";
+
+
+import Carousel from "react-bootstrap/Carousel"; // carousel react component
+
 
 const TrailItem = ({ trail }) => (
   <li key={trail.id}>
@@ -32,13 +38,20 @@ const ImageCover = ({ photo, name }) => (
   </div>
 );
 
-const TrailCardDetails = ({ trail }) => (
-  <div className="trail__details">
-    <h2>{trail.name}</h2>
-    <TrailRating trail={trail} />
-    <TrailMetadata trail={trail} />
-  </div>
-);
+const TrailCardDetails = ({ trail }) => {
+  const coordinates = formatCoordinates(trail.latitude, trail.longitude);
+
+  return (
+    <div className="trail__details">
+      <h2>{trail.name}</h2>
+      <TrailRating trail={trail} />
+      <TrailMetadata trail={trail} />
+      {coordinates && (
+        <p className="trail__coordinates">Coordinates: {coordinates}</p>
+      )}
+    </div>
+  );
+};
 
 const TrailRating = ({ trail }) => (
   <div className="trail__rating">
@@ -83,14 +96,35 @@ export default function TrailListings({
     }, filters);
   }, [filters]);
 
+
+  //triple carousel starting
+  const trailSlides = Array.from(
+  { length: Math.ceil(trails.length / 3) },
+    (_, index) => trails.slice(index * 3, index * 3 + 3)
+  );
+  
+
   return (
+
+
+   
     <article>
       <Filters filters={filters} setFilters={setFilters} />
-      <ul className="trails">
-        {trails.map((trail) => (
-          <TrailItem key={trail.id} trail={trail} />
+
+      
+      <Carousel interval={null}>
+        {trailSlides.map((slide) => (
+      <Carousel.Item key={slide[0].id}>
+      <div className="row g-3 ">
+        {slide.map((trail) => (
+          <div className="col-12 col-md-4 " key={trail.id}>
+            <TrailItem trail={trail} />
+          </div>
         ))}
-      </ul>
+      </div>
+    </Carousel.Item>
+  ))}
+</Carousel>
     </article>
   );
 }

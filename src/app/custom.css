@@ -1,0 +1,120 @@
+body {
+    background-color: #ffffff;
+    background-image: url("/AnnadelBackground1920.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-attachment: fixed;
+    color: rgb(5, 5, 5);
+
+        font-size: larger;
+    font-weight: 500;
+    color: #000000;
+}
+
+li {
+
+}
+
+summary {
+    background: rgb(170, 255, 170);
+    box-shadow: 1px 1px 3px 2px;
+}
+
+.main__home {
+    background-color: #ffffff;
+    background-image: url("/AnnadelBackground1920.jpg");
+    background-repeat: no-repeat;
+    background-size:cover;
+    background-attachment: fixed;
+    color: rgb(5, 5, 5);
+}
+
+.imgSize {
+    width: 60%;
+}
+
+.alignContainerCenter {
+    display: flex;
+    justify-content: center;
+
+}
+
+.alignCenter {
+    justify-content: center;
+}
+
+.bgColor1 {
+    background-color:rgba(50, 51, 50, 0.788);
+    
+}
+
+.bgColor2 {
+    background-color:rgba(174, 253, 174, 0.575);
+}
+
+.nav-link {
+    color: #000000;
+}
+
+#txtColor1{
+    color: #000000;
+}
+
+.navbar-brand {
+    color:#000000;
+}
+
+.navbar {
+    background-color:rgba(174, 253, 174, 0.575);
+    font-size: larger;
+    font-weight: 600;
+    color: #000000;
+       
+    
+}
+
+.reviews time {
+    color: black;
+        
+}
+
+.reviews .review__item {
+    border-bottom: 6px solid #07070740;
+    padding: 40px;
+}
+
+.carousel-indicators {
+    background-color: #040e0063;
+}
+article {
+        background-color: rgba(105, 179, 121, 0.952);
+
+}
+
+.round {
+        background-color: #02881f70;
+
+
+}
+
+.addShadow {
+    box-shadow: 5px 5px 15px #020202;
+    
+}
+
+.addColShadow {
+        box-shadow: 4px 4px 5px 3px;
+}
+
+.addTxtShadow {
+    text-shadow: 0px 0px 5px #020202;
+}
+
+navbar-dark {
+        background-color:rgba(7, 39, 0, 0.301);
+}
+
+bg-dark {
+    background-color:rgba(7, 39, 0, 0.466);
+}
+

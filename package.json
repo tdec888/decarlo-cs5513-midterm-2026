@@ -14,13 +14,17 @@
   "dependencies": {
     "@genkit-ai/googleai": "^1.28.0",
     "@genkit-ai/vertexai": "^1.42.0",
+    "bootstrap": "^5.3.8",
     "cookies-next": "^6.1.1",
     "firebase": "^13.0.0",
     "firebase-tools": "^15.33.0",
     "genkit": "^1.42.0",
+    "leaflet": "^1.9.4",
     "next": "^16.4.0",
     "react": "19.3.0",
+    "react-bootstrap": "^2.10.10",
     "react-dom": "19.3.0",
+    "react-leaflet": "^5.0.0",
     "server-only": "^0.0.1"
   },
   "browser": {

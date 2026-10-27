@@ -46,10 +46,7 @@ export default function Header({ initialUser }) {
 
   return (
     <header>
-      <Link href="/" className="logo">
-        <img src="/grand-hiking-trails.svg" alt="Grand Hiking Trails" />
-        Grand Hiking Trails
-      </Link>
+
       {user ? (
         <>
           <div className="profile">
@@ -79,6 +76,7 @@ export default function Header({ initialUser }) {
                   </a>
                 </li>
               </ul>
+              
             </div>
           </div>
         </>

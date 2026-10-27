@@ -43,6 +43,10 @@ export async function generateFakeTrailsAndReviews() {
           0
         ) / ratingsData.length
       : 0;
+    const city =
+      randomData.trailCities[
+        randomNumberBetween(0, randomData.trailCities.length - 1)
+      ];
 
     const trailData = {
       category:
@@ -53,9 +57,9 @@ export async function generateFakeTrailsAndReviews() {
         randomNumberBetween(0, randomData.trailNames.length - 1)
       ],
       avgRating,
-      city: randomData.trailCities[
-        randomNumberBetween(0, randomData.trailCities.length - 1)
-      ],
+      city,
+      latitude: randomData.trailLocations[city].latitude,
+      longitude: randomData.trailLocations[city].longitude,
       numRatings: ratingsData.length,
       sumRating: ratingsData.reduce(
         (accumulator, currentValue) => accumulator + currentValue.rating,

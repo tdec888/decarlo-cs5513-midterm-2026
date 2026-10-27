@@ -152,7 +152,7 @@ header {
   /* display: block; */
   left: calc(-220px * 0.9);
   color: rgb(41 56 44);
-  background-color: rgb(250 248 244);
+  background-color: rgba(250, 248, 244, 0.966);
   box-shadow: 0 0 10px 0 rgb(0 0 0 / 35%);
 
   & li {
@@ -195,18 +195,19 @@ header {
 }
 
 .main__home {
-  background: linear-gradient(180deg, rgb(232 238 223), rgb(244 240 234));
+  /*background: linear-gradient(180deg, rgb(232 238 223), rgb(244 240 234));*/
+
   min-height: 100vh;
 }
 
 .main__trail {
-  background-color: rgb(236 235 228);
+  background-color: rgba(236, 235, 228, 0);
   min-height: 90vh;
 }
 
 article {
   margin: 0 auto;
-  background-color: rgb(243 238 231);
+  background-color: rgba(243, 238, 231, 0);
   padding: 20px 40px;
 }
 
@@ -264,6 +265,33 @@ a {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.trail__coordinates {
+  font-size: 0.85rem;
+  color: inherit;
+}
+
+.trail-map-marker {
+  background: transparent;
+  border: none;
+}
+
+.trail-map-marker__dot {
+  display: block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgb(34 96 58);
+  border: 2px solid white;
+  box-shadow: 0 0 0 5px rgb(34 96 58 / 18%);
+}
+
+.trail-map-marker--selected .trail-map-marker__dot {
+  width: 20px;
+  height: 20px;
+  background: rgb(191 111 33);
+  box-shadow: 0 0 0 6px rgb(191 111 33 / 25%);
 }
 
 .trail__details {

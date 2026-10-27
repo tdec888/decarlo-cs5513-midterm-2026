@@ -35,7 +35,7 @@ export default async function RootLayout({ children }) {
             </button>
             <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
               <div className="navbar-nav ">
-                <a className="nav-link active txtColor1" aria-current="page" href="#">Hiking Trails</a>
+                <a className="nav-link active txtColor1" aria-current="page" href="#"></a>
                 <a className="nav-link" href="#"></a>
               </div>
             </div>

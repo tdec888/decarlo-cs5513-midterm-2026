@@ -34,17 +34,17 @@ export async function getAuthenticatedAppForUser() {
 
     // the below code is used for local dev and will need to be commented out and replaced with the initapp func below.
     //code 1*
-    app, { 
-      authIdToken,
-    });
+    //app, { 
+    //  authIdToken,
+    //});
     
     // https://github.com/firebase/firebase-js-sdk/issues/8863#issuecomment-2751401913
     // this should be uncommented for server deployment code 1*
-    //initializeApp(),
-    //{
-    //  authIdToken,
-    //}
-    //);
+    initializeApp(),
+    {
+      authIdToken,
+    }
+    );
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();

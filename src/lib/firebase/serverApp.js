@@ -2,26 +2,28 @@
 // https://nextjs.org/docs/app/building-your-application/rendering/composition-patterns#keeping-server-only-code-out-of-the-client-environment
 import "server-only";
 
-import { getApp, getApps, initializeApp, initializeServerApp } from "firebase/app";// this is to utilize local dev code:1*
+import {
+  getApp,
+  getApps,
+  initializeApp,
+  initializeServerApp,
+} from "firebase/app";
 
 import { cookies } from "next/headers";
-//import { initializeServerApp, initializeApp } from "firebase/app"; // this will be for server upload, swap the local dev code with this line
-
 import { getAuth } from "firebase/auth";
 
-//this is to establish the local auth for dev code:1*
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-
-
-// end local auth
-
-const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
+// Firebase App Hosting supplies the options for no-argument initialization.
+// For local development, replace initializeApp() below with initializeApp(firebaseConfig).
+const app = getApps().length ? getApp() : initializeApp();
 
 // Returns an authenticated client SDK instance for use in Server Side Rendering
 // and Static Site Generation
@@ -29,22 +31,10 @@ export async function getAuthenticatedAppForUser() {
   // Read the ID token cookie set by the client so server Firebase requests use the user's identity.
   const authIdToken = (await cookies()).get("__session")?.value;
 
-  // Create a server-compatible Firebase app instance associated with the current user's token.
-  const firebaseServerApp = initializeServerApp(
-
-    // the below code is used for local dev and will need to be commented out and replaced with the initapp func below.
-    //code 1*
-    //app, { 
-    //  authIdToken,
-    //});
-    
-    // https://github.com/firebase/firebase-js-sdk/issues/8863#issuecomment-2751401913
-    // this should be uncommented for server deployment code 1*
-    initializeApp(),
-    {
-      authIdToken,
-    }
-    );
+  // Reuse the initialized app so server auth uses the same Firebase project options.
+  const firebaseServerApp = initializeServerApp(app, {
+    authIdToken,
+  });
 
   const auth = getAuth(firebaseServerApp);
   await auth.authStateReady();

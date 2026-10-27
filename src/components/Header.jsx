@@ -47,8 +47,8 @@ export default function Header({ initialUser }) {
   return (
     <header>
       <Link href="/" className="logo">
-        <img src="/friendly-trails.svg" alt="Friendly Trails" />
-        Friendly Trails
+        <img src="/grand-hiking-trails.svg" alt="Grand Hiking Trails" />
+        Grand Hiking Trails
       </Link>
       {user ? (
         <>

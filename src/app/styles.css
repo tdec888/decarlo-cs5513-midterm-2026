@@ -83,8 +83,8 @@ footer {
   }
 
   & .button--confirm {
-    background-color: rgb(255 111 0);
-    color: white;
+    background-color: rgb(113 88 56);
+    color: rgb(248 243 236);
     border-radius: 3px;
   }
 
@@ -97,8 +97,8 @@ footer {
 }
 
 header {
-  background-color: rgb(56 85 116);
-  color: white;
+  background: linear-gradient(135deg, rgb(34 62 43), rgb(73 101 70));
+  color: rgb(248 243 236);
   display: flex;
   justify-content: space-between;
   padding: 0.8rem;
@@ -115,11 +115,11 @@ header {
   }
   & a {
     text-decoration: none;
-    color: white;
+    color: rgb(248 243 236);
   }
   .profileImage {
     border-radius: 100%;
-    border-color: white;
+    border-color: rgb(248 243 236);
     border-width: 2px;
     border-style: solid;
     margin-right: 10px;
@@ -134,10 +134,11 @@ header {
     margin-inline-end: 10px;
   }
 
-  color: white;
+  color: rgb(248 243 236);
   text-decoration: none;
   font-size: 1.25rem;
-  font-weight: 500;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 .menu {
@@ -150,13 +151,13 @@ header {
 .menu ul {
   /* display: block; */
   left: calc(-220px * 0.9);
-  color: rgb(42 72 101);
-  background-color: white;
-  box-shadow: 0 0 10px 0 rgb(0 0 0 / 50%);
+  color: rgb(41 56 44);
+  background-color: rgb(250 248 244);
+  box-shadow: 0 0 10px 0 rgb(0 0 0 / 35%);
 
   & li {
     padding: 10px;
-    border-bottom: 1px solid rgb(42 72 101 / 0.25);
+    border-bottom: 1px solid rgb(41 56 44 / 0.2);
   }
 
   & a {
@@ -194,18 +195,18 @@ header {
 }
 
 .main__home {
-  background-color: rgb(178 193 212);
+  background: linear-gradient(180deg, rgb(232 238 223), rgb(244 240 234));
   min-height: 100vh;
 }
 
 .main__trail {
-  background-color: rgb(229 234 240);
+  background-color: rgb(236 235 228);
   min-height: 90vh;
 }
 
 article {
   margin: 0 auto;
-  background-color: rgb(229 234 240);
+  background-color: rgb(243 238 231);
   padding: 20px 40px;
 }
 
@@ -320,15 +321,15 @@ a {
 }
 
 .details__container {
-  --tw-gradient-from: #c60094 var(--tw-gradient-from-position);
-  --tw-gradient-to: rgb(56 85 116 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-from: rgb(31 50 36) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(104 82 61 / 0) var(--tw-gradient-to-position);
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
   background-image: linear-gradient(to top right, var(--tw-gradient-stops));
   position: absolute;
   right: 0;
   bottom: 0;
   left: 0;
-  background: rgb(24 25 26 / 50%);
+  background: rgb(21 30 25 / 55%);
   width: 100%;
   height: 100%;
 }
@@ -363,7 +364,7 @@ a {
     --tw-shadow:
       0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     cursor: pointer;
-    background-color: rgb(255 202 40);
+    background-color: rgb(175 124 75);
     border-radius: 0.75rem;
     box-shadow:
       var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
@@ -379,7 +380,7 @@ a {
     box-shadow:
       var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
       var(--tw-shadow);
-    background-color: rgb(255 143 0);
+    background-color: rgb(82 110 74);
     border-radius: 9999px;
     cursor: pointer;
     height: 4rem;
@@ -398,7 +399,7 @@ a {
   padding: 20px;
   font-size: 17px;
   border: none;
-  border-bottom: 2px solid rgb(255 111 0);
+  border-bottom: 2px solid rgb(113 88 56);
   width: 100%;
 }
 

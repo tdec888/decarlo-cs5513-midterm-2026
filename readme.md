@@ -1,4 +1,4 @@
-### Friendly Trails with Next.js + Firebase
+### Grand Hiking Trails with Next.js + Firebase
 
 The codelab has the full instructions, but as a quick start, you can do this.
 

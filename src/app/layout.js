@@ -6,9 +6,9 @@ import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 export const dynamic = "force-dynamic";
 
 export const metadata = {
-  title: "Friendly Trails",
+  title: "Grand Hiking Trails",
   description:
-    "Friendly Trails is a hiking trail review website built with Next.js and Firebase.",
+    "Grand Hiking Trails is a hiking trail review website built with Next.js and Firebase.",
 };
 
 export default async function RootLayout({ children }) {

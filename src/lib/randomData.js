@@ -1,5 +1,5 @@
 // Random trail data that is added to Firestore
-// After you've signed into Friendly Trails, click the dropdown
+// After you've signed into Grand Hiking Trails, click the dropdown
 // menu in the top right corner and select "Add sample trails"
 
 export const randomData = {

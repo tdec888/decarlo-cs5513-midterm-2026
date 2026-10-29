@@ -1,6 +1,4 @@
 import { genkit } from 'genkit';
-
-// Using the legacy package your server environment is currently locked into
 import { vertexAI } from '@genkit-ai/vertexai';
 
 import { getReviewsByTrailId } from "@/src/lib/firebase/firestore.js";
@@ -24,13 +22,14 @@ export async function GeminiSummary({ trailId }) {
   `;
 
   try {
-    // FIX: Set the exact region your Cloud Run service utilizes to build valid endpoints
+    // Keep us-east4 to avoid endpoint syntax bugs
     const ai = genkit({
       plugins: [vertexAI({ location: 'us-east4' })], 
     });
     
+    // FIX: Swapped gemini-2.5-flash to gemini-1.5-flash for regional availability
     const { text } = await ai.generate({
-      model: 'vertexai/gemini-2.5-flash',
+      model: 'vertexai/gemini-1.5-flash',
       prompt: prompt,
     });
 

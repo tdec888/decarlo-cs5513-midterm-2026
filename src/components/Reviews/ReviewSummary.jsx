@@ -21,15 +21,22 @@ export async function GeminiSummary({ trailId }) {
     Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
   `;
 
-   try {
-    // Keep us-east4 to avoid endpoint hostname resolution errors
+     try {
+    // Safety Guard: Check if your database query actually pulled any reviews
+    if (!reviews || reviews.length === 0) {
+      return (
+        <div className="trail__review_summary">
+          <p>📝 No live database reviews found yet to summarize for this trail.</p>
+        </div>
+      );
+    }
+
     const ai = genkit({
       plugins: [vertexAI({ location: 'us-east4' })], 
     });
     
-    // FIX: Change 'vertexai/gemini-2.5-flash' to 'vertexai/gemini-1.5-flash'
     const { text } = await ai.generate({
-      model: 'vertexai/gemini-1.5-flash', // 👈 Swapped to 1.5 for regional availability
+      model: 'vertexai/gemini-1.5-flash',
       prompt: prompt,
     });
 

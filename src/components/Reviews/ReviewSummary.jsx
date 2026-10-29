@@ -56,7 +56,7 @@ export async function GeminiSummary({ trailId }) {
 
     // Initialize the Genkit instance leveraging your secure service account permissions
     const ai = genkit({
-      plugins: [vertexAI({ location: 'us-central1' })],
+      plugins: [vertexAI({ location: 'global' })],
       model: 'vertexai/gemini-2.5-flash', // Direct explicit override fix
     });
     

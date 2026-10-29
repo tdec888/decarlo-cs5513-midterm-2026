@@ -1,6 +1,6 @@
 import { genkit } from 'genkit';
 
-// 1. Revert to the legacy package that your Firebase environment is currently running
+// Using the legacy package your server environment is currently locked into
 import { vertexAI } from '@genkit-ai/vertexai';
 
 import { getReviewsByTrailId } from "@/src/lib/firebase/firestore.js";
@@ -24,12 +24,11 @@ export async function GeminiSummary({ trailId }) {
   `;
 
   try {
-    // 2. Multi-region 'us' is accepted natively by your current legacy SDK
+    // FIX: Set the exact region your Cloud Run service utilizes to build valid endpoints
     const ai = genkit({
-      plugins: [vertexAI({ location: 'us' })], 
+      plugins: [vertexAI({ location: 'us-east4' })], 
     });
     
-    // 3. Keep the corrected explicit call formatting
     const { text } = await ai.generate({
       model: 'vertexai/gemini-2.5-flash',
       prompt: prompt,

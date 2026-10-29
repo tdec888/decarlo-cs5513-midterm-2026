@@ -1,13 +1,12 @@
-import { genkit } from 'kit';
+import { genkit } from 'genkit';
 
-// 1. Updated the import string to pull from your newly installed package!
-import { vertexAI } from '@genkit-ai/google-genai';
+// 1. Revert to the legacy package that your Firebase environment is currently running
+import { vertexAI } from '@genkit-ai/vertexai';
 
 import { getReviewsByTrailId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 import { getFirestore } from "firebase/firestore"; 
 
-// THIS FUNCTION IS REPLACING THE ORIGINAL GEMINI 2.0 WITH VERTEX AND GEMINI 2.5 FLASH
 export async function GeminiSummary({ trailId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const reviews = await getReviewsByTrailId(
@@ -25,12 +24,12 @@ export async function GeminiSummary({ trailId }) {
   `;
 
   try {
-    // 2. Updated the location to 'global' and model passing to the proper syntax
+    // 2. Multi-region 'us' is accepted natively by your current legacy SDK
     const ai = genkit({
-      plugins: [vertexAI({ location: 'global' })],
+      plugins: [vertexAI({ location: 'us' })], 
     });
     
-    // 3. Moved the model parameter explicitly into the generate function
+    // 3. Keep the corrected explicit call formatting
     const { text } = await ai.generate({
       model: 'vertexai/gemini-2.5-flash',
       prompt: prompt,
@@ -48,7 +47,6 @@ export async function GeminiSummary({ trailId }) {
   }
 }
 
-// Shown while the summary section is waiting to render.
 export function GeminiSummarySkeleton() {
   return (
     <div className="trail__review_summary">

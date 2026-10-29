@@ -12,6 +12,7 @@ import { genkit } from 'genkit';
 // ❌ REMOVE the old line if it's there:
 
 //import { vertexAI, gemini25Flash } from '@genkit-ai/vertexai';
+//import { vertexAI, gemini20Flash } from '@genkit-ai/vertexai';
 import { vertexAI, gemini20Flash } from '@genkit-ai/vertexai';
 
 //end updated import

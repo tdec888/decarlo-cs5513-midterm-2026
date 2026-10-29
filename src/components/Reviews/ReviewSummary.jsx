@@ -21,15 +21,15 @@ export async function GeminiSummary({ trailId }) {
     Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
   `;
 
-  try {
-    // Keep us-east4 to avoid endpoint syntax bugs
+   try {
+    // Keep us-east4 to avoid endpoint hostname resolution errors
     const ai = genkit({
       plugins: [vertexAI({ location: 'us-east4' })], 
     });
     
-    // FIX: Swapped gemini-2.5-flash to gemini-1.5-flash for regional availability
+    // FIX: Change 'vertexai/gemini-2.5-flash' to 'vertexai/gemini-1.5-flash'
     const { text } = await ai.generate({
-      model: 'vertexai/gemini-1.5-flash',
+      model: 'vertexai/gemini-1.5-flash', // 👈 Swapped to 1.5 for regional availability
       prompt: prompt,
     });
 

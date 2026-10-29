@@ -1,39 +1,13 @@
+import { genkit } from 'kit';
 
-
-
-
-// commented out gemini20flash and replaced with the vertexAI and gemini25flash 
-// import { gemini20Flash, googleAI } from "@genkit-ai/googleai";
-
-
-// this is the new import replacing gemini with vertex
-
-import { genkit } from 'genkit';
-// ❌ REMOVE the old line if it's there:
-
-//import { vertexAI, gemini25Flash } from '@genkit-ai/vertexai';
-//import { vertexAI, gemini20Flash } from '@genkit-ai/vertexai';
-import { vertexAI, gemini20Flash } from '@genkit-ai/vertexai';
-
-//end updated import
-//commenting out to adjust import order: import { genkit } from "genkit";
+// 1. Updated the import string to pull from your newly installed package!
+import { vertexAI } from '@genkit-ai/google-genai';
 
 import { getReviewsByTrailId } from "@/src/lib/firebase/firestore.js";
 import { getAuthenticatedAppForUser } from "@/src/lib/firebase/serverApp";
 import { getFirestore } from "firebase/firestore"; 
 
-// Placeholder for a future AI-generated summary; no model call is made yet.
-/* export async function GeminiSummary({ trailId }) {
-  return (
-    <div className="trail__review_summary">
-      <p>TODO: summarize reviews</p>
-    </div>
-  );
-}*/
-
-
-//THIS FUNCTION IS REPLACING THE ORIGINAL GEMINI 2.0 WITH VERTEXT AND GEMINI 2.5 FLASH---
-// an API key is not needed BUT, charges will apply.
+// THIS FUNCTION IS REPLACING THE ORIGINAL GEMINI 2.0 WITH VERTEX AND GEMINI 2.5 FLASH
 export async function GeminiSummary({ trailId }) {
   const { firebaseServerApp } = await getAuthenticatedAppForUser();
   const reviews = await getReviewsByTrailId(
@@ -51,16 +25,17 @@ export async function GeminiSummary({ trailId }) {
   `;
 
   try {
-    // 1. REMOVED THE GEMINI_API_KEY CHECK BLOCK
-    // Since we are using ADC, you do not need to look for an API key environment variable.
-
-    // Initialize the Genkit instance leveraging your secure service account permissions
+    // 2. Updated the location to 'global' and model passing to the proper syntax
     const ai = genkit({
       plugins: [vertexAI({ location: 'global' })],
-      model: 'vertexai/gemini-2.5-flash', // Direct explicit override fix
     });
     
-    const { text } = await ai.generate(prompt);
+    // 3. Moved the model parameter explicitly into the generate function
+    const { text } = await ai.generate({
+      model: 'vertexai/gemini-2.5-flash',
+      prompt: prompt,
+    });
+
     return (
       <div className="trail__review_summary">
         <p>{text}</p>
@@ -72,55 +47,6 @@ export async function GeminiSummary({ trailId }) {
     return <p>Error summarizing reviews.</p>;
   }
 }
-
-
-
-
-
-/* We are commenting out the gemini20 flash which uses the API KEY-----THIS IS THE ORIGINAL AI FUNCTION BELOW
-export async function GeminiSummary({ trailId }) {
-  const { firebaseServerApp } = await getAuthenticatedAppForUser();
-  const reviews = await getReviewsByTrailId(
-    getFirestore(firebaseServerApp),
-    trailId
-  );
-
-  const reviewSeparator = "@";
-  const prompt = `
-    Based on the following hiking trail reviews, 
-    where each review is separated by a '${reviewSeparator}' character, 
-    create a one-sentence summary of what people think of the trail. 
-
-    Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
-  `;
-
-  try {
-    if (!process.env.GEMINI_API_KEY) {
-      // Make sure GEMINI_API_KEY environment variable is set:
-      // https://genkit.dev/docs/get-started/
-      throw new Error(
-        'GEMINI_API_KEY not set. Set it with "firebase apphosting:secrets:set GEMINI_API_KEY"'
-      );
-    }
-
-    // Configure a Genkit instance.
-    const ai = genkit({
-      plugins: [googleAI()],
-      model: gemini20Flash, // set default model
-    });
-    const { text } = await ai.generate(prompt);
-
-    return (
-      <div className="trail__review_summary">
-        <p>{text}</p>
-        <p>✨ Summarized with Gemini</p>
-      </div>
-    );
-  } catch (e) {
-    console.error(e);
-    return <p>Error summarizing reviews.</p>;
-  }
-} end summary using gemini2.0flash */
 
 // Shown while the summary section is waiting to render.
 export function GeminiSummarySkeleton() {

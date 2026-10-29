@@ -7,7 +7,7 @@ import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import { randomData } from "@/src/lib/randomData.js";
 
 const DEFAULT_CENTER = [38.437010297460034, -122.71623240115119];
-const DEFAULT_ZOOM = 5;
+const DEFAULT_ZOOM = 10;
 const SELECTED_ZOOM = 12;
 
 const markerIcons = {

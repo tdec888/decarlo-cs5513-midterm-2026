@@ -21,18 +21,10 @@ export async function GeminiSummary({ trailId }) {
     Here are the reviews: ${reviews.map((review) => review.text).join(reviewSeparator)}
   `;
 
-     try {
-    // Safety Guard: Check if your database query actually pulled any reviews
-    if (!reviews || reviews.length === 0) {
-      return (
-        <div className="trail__review_summary">
-          <p>📝 No live database reviews found yet to summarize for this trail.</p>
-        </div>
-      );
-    }
-
+ try {
+    // FIX: Switch location from 'us-east4' to 'us-central1'
     const ai = genkit({
-      plugins: [vertexAI({ location: 'us-east4' })], 
+      plugins: [vertexAI({ location: 'us-central1' })], // 👈 Direct central hub routing fix
     });
     
     const { text } = await ai.generate({
